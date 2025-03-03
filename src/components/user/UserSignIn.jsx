@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom'
 import * as yup from "yup";
 import axiosInstance from '../../config/axiosInstance';
+import { useUser } from '../../context/UserContext';
 
 
 const schema = yup.object({
@@ -18,14 +19,24 @@ const UserSignIn = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) });
 
+    const { saveUser } = useUser();
+
     const onSubmit = async (data) => {
         try {
 
             const res = await axiosInstance.post('/user/signIn', data);
             const resData = await res.data;
 
+
+
+
+            console.log(resData.user);
+
+            if (resData.user) {
+                saveUser(resData.user); // Save user in context and localStorage
+            }
             const role = resData.role;
-            console.log(resData.role);
+            console.log(role);
 
             if (role === 'user') {
                 alert('successfully loged in ');

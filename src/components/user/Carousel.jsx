@@ -28,16 +28,18 @@ const Carousel = () => {
     }, [images.length]);
 
     return (
-        <div className="relative w-full h-full overflow-hidden ">
+        <div className="relative min-w-full h-96 overflow-hidden  ">
             {/* Slides */}
             <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
                 {images.map((image, index) => (
-                    <div key={index} className="min-w-full h-96 bg-no-repeat bg-cover bg-center text-center" style={{ backgroundImage: `url(${image})` }}>
-                        <h1>hiiii guyss</h1>
+                    <div key={index} className="min-w-full h-96 "  >
+                    {/* style={{ backgroundImage: `url(${image})` }} */}
+                       <img src={image} className='h-96  min-w-full object-cover' style={{backgroundSize: "cover", backgroundPosition: "center" }} alt="" />
                     </div>
+                    
                 ))}
             </div>
 

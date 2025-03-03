@@ -1,11 +1,10 @@
-// src/context/UserContext.js
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import axiosInstance from '../config/axiosInstance';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import axiosInstance from "../config/axiosInstance";
 
 // Create the context
 const UserContext = createContext();
 
-// Custom hook to access the context
+// Custom hook to access UserContext
 export const useUser = () => useContext(UserContext);
 
 // Provider component
@@ -14,93 +13,70 @@ export const UserProvider = ({ children }) => {
   const [itemCount, setItemCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-//   useEffect(() => {
-//     const fetchCurrentUser = async () => {
-//       try {
-//         const storedUser = localStorage.getItem('currentUser');
-//         if (storedUser) {
-//           setCurrentUser(JSON.parse(storedUser));
-//         } else {
-//           const res = await axiosInstance.get('/user/get-current-user'); // Replace with your API endpoint
-//           setCurrentUser(res.data);
-//           localStorage.setItem('currentUser', JSON.stringify(res.data));
-//         }
-//       } catch (error) {
-//         console.error('Error fetching user:', error);
-//         setCurrentUser(null);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
+  // Fetch user on app load (from backend or localStorage)
+  useEffect(() => {
+    let isMounted = true;
 
-//     fetchCurrentUser();
-//   }, []);
-
-
-
-useEffect(() => {
-    let isMounted = true; // Flag to track if the component is mounted
-  
     const fetchCurrentUser = async () => {
       try {
-        const storedUser = localStorage.getItem('currentUser');
-        if (storedUser && isMounted) {
-          setCurrentUser(JSON.parse(storedUser)); // Set user from localStorage
-        } else if (isMounted) {
-          const res = await axiosInstance.get('/user/get-current-user');
+        const res = await axiosInstance.get("/user/get-current-user", {
+          withCredentials: true, // Ensure cookies are sent
+        });
+
+        if (isMounted) {
           setCurrentUser(res.data);
-          localStorage.setItem('currentUser', JSON.stringify(res.data));
         }
       } catch (error) {
         if (isMounted) {
-          console.error('Error fetching user:', error);
+          console.error("Error fetching user:", error);
           setCurrentUser(null);
         }
       } finally {
         if (isMounted) setLoading(false);
       }
     };
-  
+
     fetchCurrentUser();
-  
+
     return () => {
-      isMounted = false; // Cleanup on component unmount
+      isMounted = false; // Cleanup
     };
   }, []);
-  
-  
-   // Fetch the item count for the bag
-   useEffect(() => {
+
+  // Fetch user's bag item count
+  useEffect(() => {
     const fetchItemCount = async () => {
       if (!currentUser) return;
 
       try {
         const res = await axiosInstance.get(`/bag/get-bag/${currentUser._id}`);
-        setItemCount(res.data.bag?.totalItems || 0); // Update item count
+        setItemCount(res.data.bag?.totalItems || 0);
       } catch (error) {
-        console.error('Error fetching bag item count:', error);
-        setItemCount(0); // Reset to 0 if there's an error
+        console.error("Error fetching bag item count:", error);
+        setItemCount(0);
       }
     };
 
     fetchItemCount();
   }, [currentUser]);
 
- 
-
-  const clearUser = () => {
-    setCurrentUser(null); // Clear the user in state
-    localStorage.removeItem('currentUser'); // Remove user data from localStorage
-    localStorage.removeItem('jwtToken'); // Remove the JWT token
+  // Function to update user
+  const saveUser = (userData) => {
+    setCurrentUser(userData);
   };
 
+  
+
+  const clearUser = () => {
+         setCurrentUser(null); // Clear the user in state
+        
+        setItemCount(0); // Reset item count
+       
+       };
+
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser,itemCount, setItemCount, loading, clearUser }}>
+    <UserContext.Provider value={{ currentUser, itemCount, saveUser, clearUser, loading }}>
       {children}
     </UserContext.Provider>
   );
 };
-
-
-
-

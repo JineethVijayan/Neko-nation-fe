@@ -22,6 +22,20 @@ import { UserProvider } from './context/UserContext';
 import Profile from './components/user/Profile';
 import Bag from './components/user/Bag';
 import OrderDetails from './components/user/OrderDetails';
+import UserDetail from './components/user/UserDetail';
+import Myorder from './components/user/Myorder';
+import Mywishlist from './components/user/Mywishlist';
+import MyAddress from './components/user/MyAddress';
+import TermsOfUse from './components/user/TermsOfUse';
+import Privacyandpolicy from './components/user/Privacyandpolicy';
+import MaleProducts from './components/user/MaleProducts';
+import WomenProducts from './components/user/WomenProducts';
+import CultureProducts from './components/user/CultureProducts';
+import MoviesProducts from './components/user/MoviesProducts';
+import SportsProducts from './components/user/SportsProducts';
+import AnimeProducts from './components/user/AnimeProducts';
+import MusicProducts from './components/user/MusicProducts';
+import ProductUpdateForm from './components/manager/ProductUpdateForm';
 
 
 
@@ -50,8 +64,8 @@ const router = createBrowserRouter([
         element: <Bag />
       },
       {
-        path:"/order-details/:id",
-        element:<OrderDetails />
+        path: "/order-details/:id",
+        element: <OrderDetails />
       },
       {
         path: "/user/contact-us",
@@ -67,7 +81,66 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/profile",
-        element: <Profile />
+        element: <Profile />,
+        children: [
+          {
+
+            index: true,
+            element: <UserDetail />
+          },
+          {
+            path: '/user/profile/user-details',
+            element: <UserDetail />
+          },
+          {
+            path: '/user/profile/my-orders',
+            element: <Myorder />
+          },
+          {
+            path: '/user/profile/my-wishlist',
+            element: <Mywishlist />
+          },
+          {
+            path: "/user/profile/my-address",
+            element: <MyAddress />
+          },
+          {
+            path: "/user/profile/terms-of-use",
+            element: <TermsOfUse />
+          },
+          {
+            path: "/user/profile/privacy-and-policy",
+            element: <Privacyandpolicy />
+          }
+        ]
+      },
+      {
+        path: '/products/male',
+        element: <MaleProducts />
+      },
+      {
+        path: '/products/women',
+        element: <WomenProducts />
+      },
+      {
+        path:'/product/interests/culture',
+        element: <CultureProducts />
+      },
+      {
+        path:'/product/interests/movies',
+        element:<MoviesProducts />
+      },
+      {
+        path:"/product/interests/sports",
+        element:<SportsProducts />
+      },
+      {
+        path:"/product/interests/anime",
+        element:<AnimeProducts />
+      },
+      {
+        path:"/product/interests/music",
+        element:<MusicProducts />
       }
     ]
   },
@@ -83,9 +156,15 @@ const router = createBrowserRouter([
         element: <CreateProducts />
       },
       {
+        path:"/manager/products/update-product/:id",
+        element:<ProductUpdateForm />
+      },
+      {
         path: "/Manager/profile",
-        element: <ManagerProfile />
-      }
+        element: <ManagerProfile />,
+
+      },
+      
     ]
   }
 ]);

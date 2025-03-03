@@ -42,8 +42,11 @@ const ProductDetail = () => {
 
     const [selectedSize, setSelectedSize] = useState('');
 
+    const [selectedColor,setSelectedColor] =useState('');
 
-    const handleClick = (size) => setSelectedSize(size);
+    const handleSize = (size) => setSelectedSize(size);
+const handleColor = (color) => setSelectedColor(color);
+    
 
     // console.log(selectedSize);
 
@@ -71,6 +74,7 @@ const ProductDetail = () => {
         if (!currentUser) {
             alert('please login first');
             navigate('/user/signin');
+            return;
         };
         if (!selectedSize) {
             alert('please select size first');
@@ -81,7 +85,7 @@ const ProductDetail = () => {
             const userId = await currentUser._id;
             const productId = await product._id;
             const size = selectedSize;
-            const color = 'Black';
+            const color = selectedColor ;
             console.log(userId, productId, size);
 
 
@@ -119,7 +123,7 @@ const ProductDetail = () => {
 
                             {
                                 product.sizes?.map((size, index) => (
-                                    <p onClick={() => handleClick(size)} className={`cursor-pointer px-4 py-2 me-2  ${selectedSize === size
+                                    <p onClick={() => handleSize(size)} className={`cursor-pointer px-4 py-2 me-2  ${selectedSize === size
                                         ? 'bg-blue-500 text-white'
                                         : 'bg-gray-200 hover:bg-gray-300'
                                         }`} key={index}>{size}</p>
@@ -127,8 +131,23 @@ const ProductDetail = () => {
                             }
 
 
-
                         </div>
+
+
+                        <div className='grid grid-flow-col w-56  mt-10'>
+
+{
+    product.colors?.map((color, index) => (
+        <p onClick={() => handleColor(color)} className={`cursor-pointer px-4 py-2 me-2  ${ selectedColor === color
+            ? 'bg-blue-500 text-white'
+            : 'bg-gray-200 hover:bg-gray-300'
+            }`} key={index}>{color}</p>
+    ))
+}
+
+
+
+</div>
 
 
                         <button onClick={() => submitData()} className=' mt-10 bg-black text-white p-4 rounded w-3/4 '>Add To Bag</button>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Address from './Address'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../config/axiosInstance';
 import { useUser } from '../../context/UserContext';
 
@@ -10,16 +10,43 @@ const OrderDetails = () => {
 
     // console.log(id);
 
+    const navigate = useNavigate();
 
     const { currentUser, loading: userLoading } = useUser();
 
     const [selectedAddress, setSelectedAddress] = useState(null);
 
+    const [bag, setBag] = useState([]);
 
     const radioChange = (address) => {
         // console.log('Selected address:', address);
         setSelectedAddress(address);
     };
+
+
+    useEffect(() => {
+        const getBag = async () => {
+
+
+            try {
+                const bagId = id;
+                console.log("Fetching bag :", bagId);
+
+                const res = await axiosInstance.get(`bag/get-bag-byId/${bagId}`);
+                const resData = res.data;
+                console.log("Bag data fetched:", resData);
+
+                setBag(resData.bag);
+
+            } catch (error) {
+                console.error("Error fetching bag:", error);
+            }
+        };
+
+        if (!userLoading) {
+            getBag();
+        }
+    }, [currentUser, userLoading]);
 
 
 
@@ -45,9 +72,9 @@ const OrderDetails = () => {
                 alert('Please add or select an address');
                 return;
             }
-    
+
             const addressId = selectedAddress._id;
-    
+
             console.log(`userId: ${userId}, bagId: ${bagId}, addressId: ${addressId}`);
 
             // Step 1: Create Razorpay order
@@ -70,12 +97,13 @@ const OrderDetails = () => {
                         addressId,
                         bagId,
                     });
-                     
-                    console.log(paymentResponse);
-                    
 
-                    if (paymentResponse.data.message ==="Payment Successfully") {
+                    console.log(paymentResponse);
+
+
+                    if (paymentResponse.data.message === "Payment Successfully") {
                         alert('Payment successful, order created!');
+                        navigate('/')
                     } else {
                         alert('Payment verification failed!');
                     }
@@ -98,18 +126,30 @@ const OrderDetails = () => {
 
 
     return (
-        <div>
+        <div className='p-10 sm:p-0'>
 
-            <div className='grid grid-cols-5 justify-between  pt-24'>
-                <div className=' col-span-3'>
+            <div className='sm:grid grid-cols-4 justify-between  pt-24'>
+
+                <div className=' col-span-2 justify-self-start sm:ms-24'>
                     <Address handleRadioChange={radioChange} selectedAddress={selectedAddress} />
                 </div>
-                <div className='col-span-2 justify-items-center'>
-                    <div>
 
-                    </div>
-                    <div >
-                        <button onClick={handlePayment} className='bg-black text-white p-2 hover:bg-slate-900 w-full'>PROCEED TO PAY</button>
+                <div className='col-span-2 sm:justify-self-start   '>
+
+                    <div className='sm:ms-24 w-full sm:w-96 mt-6 sm:mt-0'>
+                        <h1 className='text-2xl font-bold'>Price Details</h1>
+
+                        <div className='p-6 border rounded-lg my-4'>
+                            <h1 className='flex justify-between text-xl'> <span>Total Price </span> <span> ₹  {bag.totalPrice} /-</span></h1>
+                            <h1 className='flex justify-between text-xl'> <span>Total Quantity </span> <span>{bag.totalItems}</span></h1>
+                            <h1 className='flex justify-between text-xl'> <span>Delivery charges </span>  <span > <span className='line-through decoration-red-500'>99 /-</span> <span className=' ms-2 text-green-500'>Free</span></span> </h1>
+                        </div>
+                        <div className='pt-6'>
+                            <h1 className='flex justify-between text-2xl font-bold py-6'> <span>Total Payable </span> <span> ₹  {bag.totalPrice} /-</span></h1>
+                        </div>
+                        <div className='' >
+                            <button onClick={handlePayment} className='bg-black text-white p-2 rounded-lg hover:bg-gray-300 hover:text-black w-full'>PROCEED TO PAY</button>
+                        </div>
                     </div>
                 </div>
             </div>

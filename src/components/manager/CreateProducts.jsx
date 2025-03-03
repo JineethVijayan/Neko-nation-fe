@@ -14,6 +14,24 @@ const categories = [
     { value: "Accessories", label: "Accessories" },
 ];
 
+const subcategory = [
+    
+    { value: "Regularfit-Tshirt", label: "Regularfit-Tshirt" },
+    { value: "Oversized-Tshirt", label: "Oversized-Tshirt" },
+    { value: "Printed-Shirt", label: "Printed-Shirt" },
+    { value: "Casual-Shirt", label: "Casual-Shirt" },
+]
+
+const interests = [
+    { value: "Culture", label: "Culture" },
+    { value: "Movies", label: "Movies" },
+    { value: "Sports", label: "Sports" },
+    { value: "Anime", label: "Anime" },
+    { value: "Music", label: "Music" },
+]
+    
+ 
+
 const gender =[
     { value: "Men", label: "Men" },
     { value: "Women", label: "Women" },
@@ -51,6 +69,8 @@ const validationSchema = Yup.object({
         .required("Price is required"),
     description: Yup.string().required("Description is required"),
     category: Yup.string().required("Category is required"),
+    subcategory:Yup.string().optional(),
+    interests:Yup.string().optional(),
     gender: Yup.string().required("gender is required"),
     sizes: Yup.array()
         .min(1, "Select at least one size")
@@ -94,6 +114,8 @@ const CreateProducts = () => {
         formData.append('description', data.description);
         formData.append('category', data.category);
         formData.append('gender', data.gender);
+        formData.append('subcategory',data.subcategory);
+        formData.append('interests',data.interests);
 
         data.sizes.forEach((size,index)=>{
             formData.append('sizes',size)
@@ -218,6 +240,101 @@ const CreateProducts = () => {
                         )}
                     </div>
 
+
+                    {/* subcategory */}
+
+                    <div>
+
+                        <Controller
+                            name='subcategory'
+                            control={control}
+                            defaultValue=''
+                            render={({ field }) => (
+                                <Select
+                                    className="mt-6"
+                                    {...field}
+                                    styles={{
+                                        control: (baseStyles, state) => ({
+                                            ...baseStyles,
+                                            borderColor: '#ff7b00',
+
+                                        }),
+                                    }}
+
+                                    theme={(theme) => ({
+                                        ...theme,
+                                        borderRadius: 3,
+                                        colors: {
+                                            ...theme.colors,
+                                            primary25: 'blue',
+                                            primary: 'red',
+
+                                        },
+                                    })}
+
+                                    options={subcategory} // Use the provided colors array
+                                    placeholder={<div>Select subcategory</div>}
+                                    onChange={(selectedOptions) => {
+                                        // Ensure only values are stored
+                                        field.onChange(selectedOptions ? selectedOptions.value : '');
+                                    }}
+                                    onBlur={field.onBlur} // Include onBlur for react-hook-form integration
+                                    value={subcategory.find(option => option.value === field.value)} // Set controlled value
+                                />
+                            )}
+                        />
+                        {errors.subcategory && (
+                            <p style={{ color: "red" }}>{errors.subcategory.message}</p>
+                        )}
+                    </div>
+
+
+  {/* interests */}
+
+  <div>
+
+<Controller
+    name='interests'
+    control={control}
+    defaultValue=''
+    render={({ field }) => (
+        <Select
+            className="mt-6"
+            {...field}
+            styles={{
+                control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    borderColor: '#ff7b00',
+
+                }),
+            }}
+
+            theme={(theme) => ({
+                ...theme,
+                borderRadius: 3,
+                colors: {
+                    ...theme.colors,
+                    primary25: 'blue',
+                    primary: 'red',
+
+                },
+            })}
+
+            options={interests} // Use the provided colors array
+            placeholder={<div>Select interests</div>}
+            onChange={(selectedOptions) => {
+                // Ensure only values are stored
+                field.onChange(selectedOptions ? selectedOptions.value : '');
+            }}
+            onBlur={field.onBlur} // Include onBlur for react-hook-form integration
+            value={interests.find(option => option.value === field.value)} // Set controlled value
+        />
+    )}
+/>
+{errors.interests && (
+    <p style={{ color: "red" }}>{errors.interests.message}</p>
+)}
+</div>
 
 
                     {/* gender */}
