@@ -110,7 +110,7 @@ const UserNavbar = () => {
                                 className="absolute right-2 text-black px-2 py-1 rounded text-xs"
                             >
                                 <img
-                                    src="../public/images/search.png"
+                                    src="../images/search.png"
                                     alt="Search"
                                     className="w-4 h-4"
                                 />
@@ -122,7 +122,7 @@ const UserNavbar = () => {
                         <Link to="/user/bag">
                             <div className="relative flex items-center">
                                 <img
-                                    src="../public/images/grocery-store.png"
+                                    src="../images/grocery-store.png"
                                     alt="Bag"
                                     className="w-6 h-6"
                                 />
@@ -141,7 +141,7 @@ const UserNavbar = () => {
                             className="cursor-pointer flex items-center"
                         >
                             <img
-                                src="../public/images/user.png"
+                                src="../images/user.png"
                                 alt="Profile"
                                 className="w-6 h-6"
                             />
