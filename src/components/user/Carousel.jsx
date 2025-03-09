@@ -1,81 +1,83 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../../config/axiosInstance";
 
 const Carousel = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [posters, setPosters] = useState([]);
 
+  useEffect(() => {
+    const getPosters = async () => {
+      try {
+        const res = await axiosInstance.get("/poster/get-posters");
+        const resData = await res.data;
+        const allImages = resData.flatMap((poster) => poster.images);
+        setPosters(allImages);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPosters();
+  }, []);
 
-    const images = [
-      
-        '../images/carousel-1.jpg',
-        '../images/Shop-Cover.png',
-        '../images/carousel-2.jpg',
-        '../images/carousel-3.jpg',
-        '../images/carousel-4.jpg',
-        '../images/carousel-5.jpg',
-        '../images/test-fullsize.jpg',
-        '../images/mern-cover1.jpeg',
-    ]
+  useEffect(() => {
+    if (posters.length === 0) return;
+    const intervalId = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % posters.length);
+    }, 5000);
 
+    return () => clearInterval(intervalId);
+  }, [posters.length]);
 
-    const [currentIndex, setCurrentIndex] = useState(0);
+  return (
+    <div className="relative w-full h-[150px] sm:h-[320px] xs:h-[200px] overflow-hidden pt-">
+      {/* Slides */}
+      <div
+        className="flex transition-transform duration-500 ease-in-out w-full"
+        style={{
+          transform: `translateX(-${currentIndex * 100}%)`,
+        }}
+      >
+        {posters.map((poster, index) => (
+          <div
+            key={index}
+            className="h-[150px] sm:h-[320px] xs:h-[200px] min-w-full flex-shrink-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${poster})` }}
+          ></div>
+        ))}
+      </div>
 
-    // Auto-slide function using useEffect
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-        }, 5000); // Change slide every 3 seconds
+      {/* Previous Button */}
+      <button
+        onClick={() =>
+          setCurrentIndex(currentIndex === 0 ? posters.length - 1 : currentIndex - 1)
+        }
+        className="absolute top-1/2 left-2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 p-2 sm:p-1 rounded-full"
+      >
+        &#10094;
+      </button>
 
-        return () => clearInterval(intervalId); // Clear interval on unmount
-    }, [images.length]);
+      {/* Next Button */}
+      <button
+        onClick={() => setCurrentIndex((currentIndex + 1) % posters.length)}
+        className="absolute top-1/2 right-2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 p-2 sm:p-1 rounded-full"
+      >
+        &#10095;
+      </button>
 
-    return (
-        <div className="relative min-w-full h-96 overflow-hidden  ">
-            {/* Slides */}
-            <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-            >
-                {images.map((image, index) => (
-                    <div key={index} className="min-w-full h-96 "  >
-                    {/* style={{ backgroundImage: `url(${image})` }} */}
-                       <img src={image} className='h-96  min-w-full object-cover' style={{backgroundSize: "cover", backgroundPosition: "center" }} alt="" />
-                    </div>
-                    
-                ))}
-            </div>
-
-            {/* Previous Button */}
-            <button
-                onClick={() =>
-                    setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1)
-                }
-                className="absolute top-1/2 left-0 transform -translate-y-1/2 text-white bg-black bg-opacity-50 p-2"
-            >
-                &#10094;
-            </button>
-
-            {/* Next Button */}
-            <button
-                onClick={() =>
-                    setCurrentIndex((currentIndex + 1) % images.length)
-                }
-                className="absolute top-1/2 right-0 transform -translate-y-1/2 text-white bg-black bg-opacity-50 p-2"
-            >
-                &#10095;
-            </button>
-
-            {/* Indicators */}
-            <div className="absolute bottom-0 w-full flex justify-center mb-2">
-                {images.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentIndex(index)}
-                        className={`h-2 w-2 mx-1 rounded-full ${index === currentIndex ? 'bg-white' : 'bg-gray-400'
-                            }`}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+      {/* Indicators */}
+      <div className="absolute bottom-2 w-full flex justify-center">
+        {posters.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`h-2 w-2 mx-1 rounded-full ${
+              index === currentIndex ? "bg-white" : "bg-gray-400"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Carousel;

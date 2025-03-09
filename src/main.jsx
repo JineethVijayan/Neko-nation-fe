@@ -36,6 +36,7 @@ import SportsProducts from './components/user/SportsProducts';
 import AnimeProducts from './components/user/AnimeProducts';
 import MusicProducts from './components/user/MusicProducts';
 import ProductUpdateForm from './components/manager/ProductUpdateForm';
+import AddPoster from './components/manager/AddPoster';
 
 
 
@@ -158,6 +159,10 @@ const router = createBrowserRouter([
       {
         path:"/manager/products/update-product/:id",
         element:<ProductUpdateForm />
+      },
+      {
+        path:"/manager/poster/add-poster",
+        element:<AddPoster />
       },
       {
         path: "/Manager/profile",

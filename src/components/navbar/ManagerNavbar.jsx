@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const ManagerNavbar = () => {
 
-    
+
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
@@ -16,10 +16,14 @@ const ManagerNavbar = () => {
             value: "Create"
         },
         {
+            path: "/manager/poster/add-poster",
+            value: "Posters"
+        },
+        {
             path: "/Manager/profile",
             value: "Profile"
         }
-       
+
     ]
 
     const toggleMenu = () => {
@@ -27,15 +31,15 @@ const ManagerNavbar = () => {
     };
 
 
-  return (
-<nav className=" bg-[#f1faee] fixed w-full px-4 z-20">
+    return (
+        <nav className=" bg-[#f1faee] fixed w-full px-4 z-20">
             <div className="container mx-auto flex justify-between items-center">
 
-                
+
                 <div className=''>
                     <img className='w-32 h-auto mx-auto my-4' src="../images/neko-nation.png" alt="" />
                 </div>
-               
+
 
                 <ul className='hidden md:flex space-x-4 text-xl'>
                     {navLinks.map((link, index) =>
@@ -69,7 +73,7 @@ const ManagerNavbar = () => {
 
             )}
         </nav>
-  )
+    )
 }
 
 export default ManagerNavbar

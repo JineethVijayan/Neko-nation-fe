@@ -1,53 +1,87 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronDown, ChevronUp } from "lucide-react"; // MUI alternative
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
+    
+    // State for each dropdown section
+    const [openDropdown, setOpenDropdown] = useState(null);
 
-    const y = new Date().getFullYear();
-    const [year, setYear] = useState(y);
-
+    const toggleDropdown = (section) => {
+        setOpenDropdown(openDropdown === section ? null : section);
+    };
 
     return (
-        <div className='bg-stone-200  text-center sm:grid sm:grid-cols-4 sm:gap-10  p-8  '>
-
-            <div className='mb-20 sm:mb-0 '>
-                <div className=' '>
+        <div className="bg-stone-200  sm:text-center sm:grid sm:grid-cols-4 sm:gap-10 p-8">
+            {/* Logo & Copyright */}
+            <div className="mb-10 sm:mb-0">
                 <img
-                        className="w-32 h-auto sm:mx-0 mx-auto my-4"
-                        src="../images/neko-nation.png"
-                        alt="Logo"
-                    />
+                    className="w-32 h-auto sm:mx-0 mx-auto my-4"
+                    src="../images/neko-nation.png"
+                    alt="Logo"
+                />
+                <p className="mt-12">© {currentYear} Neko Nation Pvt. Ltd. All Rights Reserved.</p>
+            </div>
+
+            {/* Company Section */}
+            <div className="mb-10 sm:mb-0">
+                <button className="flex justify-between w-full sm:block font-semibold"
+                    onClick={() => toggleDropdown("company")}>
+                    <h1>COMPANY</h1>
+                    <span className="sm:hidden">
+                        {openDropdown === "company" ? <ChevronUp /> : <ChevronDown />}
+                    </span>
+                </button>
+                <div className={`overflow-hidden transition-all duration-300 ${openDropdown === "company" ? "max-h-40" : "max-h-0"} sm:max-h-none`}>
+                    <div className="flex flex-col space-y-2 mt-2">
+                        <Link to="/about-us">About Us</Link>
+                        <Link to="/contact">Contact</Link>
+                        <Link to="/careers">Careers</Link>
+                        <Link to="/partner">Partner with Us</Link>
+                    </div>
                 </div>
-                <p className='mt-12'>© {year} Techmash Solutions Pvt. Ltd.
-                    All Rights Reserved.</p>
             </div>
 
-            <div className='mb-20 sm:mb-0'>
-                <h1 className='mb-6'> COMPANY</h1>
-                <Link ><h1 className='mb-4'>About us</h1></Link>
-                <Link><h1 className='mb-4'>Contact</h1></Link>
-                <Link><h1 className='mb-4'>Careers</h1></Link>
-                <Link><h1 className=''>Partner with us</h1></Link>
+            {/* Social Section */}
+            <div className="mb-10 sm:mb-0">
+                <button className="flex justify-between w-full sm:block font-semibold"
+                    onClick={() => toggleDropdown("social")}>
+                    <h1>SOCIAL</h1>
+                    <span className="sm:hidden">
+                        {openDropdown === "social" ? <ChevronUp /> : <ChevronDown />}
+                    </span>
+                </button>
+                <div className={`overflow-hidden transition-all duration-300 ${openDropdown === "social" ? "max-h-40" : "max-h-0"} sm:max-h-none`}>
+                    <div className="flex flex-col space-y-2 mt-2">
+                        <Link to="/instagram">Instagram</Link>
+                        <Link to="/facebook">Facebook</Link>
+                        <Link to="/linkedin">LinkedIn</Link>
+                        <Link to="/twitter">Twitter</Link>
+                    </div>
+                </div>
             </div>
 
-            <div className='mb-20 sm:mb-0'>
-                <h1 className='mb-6'>SOCIAL</h1>
-                <Link><h1 className='mb-4'>Instagram</h1></Link>
-                <Link><h1 className='mb-4'>Facebook</h1></Link>
-                <Link><h1 className='mb-4'>Linkedin</h1></Link>
-                <Link><h1 className=''>Twitter</h1></Link>
+            {/* Privacy & Terms Section */}
+            <div className="mb-10 sm:mb-0">
+                <button className="flex justify-between w-full sm:block font-semibold"
+                    onClick={() => toggleDropdown("privacy")}>
+                    <h1>PRIVACY & TERMS</h1>
+                    <span className="sm:hidden">
+                        {openDropdown === "privacy" ? <ChevronUp /> : <ChevronDown />}
+                    </span>
+                </button>
+                <div className={`overflow-hidden transition-all duration-300 ${openDropdown === "privacy" ? "max-h-40" : "max-h-0"} sm:max-h-none`}>
+                    <div className="flex flex-col space-y-2 mt-2">
+                        <Link to="/faqs">FAQs</Link>
+                        <Link to="/privacy-policy">Privacy Policy</Link>
+                        <Link to="/terms-of-service">Terms of Service</Link>
+                        <Link to="/cancellation-policy">Cancellation Policy</Link>
+                    </div>
+                </div>
             </div>
-
-            <div className='mb-20 sm:mb-0'>
-                <h1 className='mb-6'>PRIVACY & TERMS</h1>
-                <Link><h1 className='mb-4'>Faqs</h1></Link>
-                <Link><h1 className='mb-4'>Privacy policy</h1></Link>
-                <Link><h1 className='mb-4'>Terms of service</h1></Link>
-                <Link><h1 className=''>Cancellation policy</h1></Link>
-            </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default Footer
+export default Footer;
