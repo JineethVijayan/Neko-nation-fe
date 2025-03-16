@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom'
 import * as yup from "yup";
@@ -16,6 +16,11 @@ const schema = yup.object({
 const UserSignIn = () => {
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Scroll to top when the component mounts
+        window.scrollTo(0, 0);
+    }, []);
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) });
 

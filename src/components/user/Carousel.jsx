@@ -6,6 +6,9 @@ const Carousel = () => {
   const [posters, setPosters] = useState([]);
 
   useEffect(() => {
+
+    window.scrollTo(0, 0);
+
     const getPosters = async () => {
       try {
         const res = await axiosInstance.get("/poster/get-posters");

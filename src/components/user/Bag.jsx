@@ -180,7 +180,7 @@ const Bag = () => {
                                 <button className="w-16 h-16" onClick={() => deleteBagItem(item._id)}>
 
                                     <img
-                                        src="../public/images/delete.png"
+                                        src="../images/delete.png"
                                         alt="Search"
                                         className="w-4 h-4" />
 

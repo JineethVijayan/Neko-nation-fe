@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { HelmetProvider } from 'react-helmet-async';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -37,6 +38,7 @@ import AnimeProducts from './components/user/AnimeProducts';
 import MusicProducts from './components/user/MusicProducts';
 import ProductUpdateForm from './components/manager/ProductUpdateForm';
 import AddPoster from './components/manager/AddPoster';
+import FacebookPixel from './components/FacebookPixel';
 
 
 
@@ -124,24 +126,24 @@ const router = createBrowserRouter([
         element: <WomenProducts />
       },
       {
-        path:'/product/interests/culture',
+        path: '/product/interests/culture',
         element: <CultureProducts />
       },
       {
-        path:'/product/interests/movies',
-        element:<MoviesProducts />
+        path: '/product/interests/movies',
+        element: <MoviesProducts />
       },
       {
-        path:"/product/interests/sports",
-        element:<SportsProducts />
+        path: "/product/interests/sports",
+        element: <SportsProducts />
       },
       {
-        path:"/product/interests/anime",
-        element:<AnimeProducts />
+        path: "/product/interests/anime",
+        element: <AnimeProducts />
       },
       {
-        path:"/product/interests/music",
-        element:<MusicProducts />
+        path: "/product/interests/music",
+        element: <MusicProducts />
       }
     ]
   },
@@ -157,27 +159,30 @@ const router = createBrowserRouter([
         element: <CreateProducts />
       },
       {
-        path:"/manager/products/update-product/:id",
-        element:<ProductUpdateForm />
+        path: "/manager/products/update-product/:id",
+        element: <ProductUpdateForm />
       },
       {
-        path:"/manager/poster/add-poster",
-        element:<AddPoster />
+        path: "/manager/poster/add-poster",
+        element: <AddPoster />
       },
       {
         path: "/Manager/profile",
         element: <ManagerProfile />,
 
       },
-      
+
     ]
   }
 ]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <UserProvider >
-      <RouterProvider router={router} />
-    </UserProvider>
+    <HelmetProvider>
+      <FacebookPixel />
+      <UserProvider >
+        <RouterProvider router={router} />
+      </UserProvider>
+    </HelmetProvider>
   </StrictMode>,
 )
