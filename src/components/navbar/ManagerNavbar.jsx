@@ -7,9 +7,14 @@ const ManagerNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     const navLinks = [
+
         {
             path: "/manager/products",
             value: "Products"
+        },
+        {
+            path: "/manager/orders",
+            value: "Orders"
         },
         {
             path: "/manager/create-products",

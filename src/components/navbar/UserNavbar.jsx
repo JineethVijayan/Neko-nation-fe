@@ -251,6 +251,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import axiosInstance from "../../config/axiosInstance";
+import toast from "react-hot-toast";
+import CustomToast from "../common/CustomToast";
 
 const UserNavbar = () => {
     const navigate = useNavigate();
@@ -297,15 +299,32 @@ const UserNavbar = () => {
     };
 
     const handleLogout = async () => {
-        try {
-            await axiosInstance.get('/user/logout');
-            clearUser();
-            setDropdownOpen(false);
-            navigate("/user/signin");
-        } catch (error) {
-            console.error('Error logging out:', error);
-        }
+        toast.custom((t) => (
+            <CustomToast
+                message="Are you sure? You want to log out"
+                onDone={async () => {
+                    toast.dismiss(t.id);
+                    
+                    try {
+                        await axiosInstance.get('/user/logout');
+                        clearUser();
+                        setDropdownOpen(false);
+                        toast.success('Logged out successfully');
+                        navigate("/user/signin");
+                    } catch (error) {
+                        console.error('Error logging out:', error);
+                        toast.error('Logout failed!');
+                    }
+                }}
+                onCancel={() => {
+                    toast.dismiss(t.id);
+                    setDropdownOpen(false);
+                    toast.error('Cancelled!');
+                }}
+            />
+        ),{duration:Infinity});
     };
+    
 
     const navLinks = [
         { path: "/", value: "Home" },

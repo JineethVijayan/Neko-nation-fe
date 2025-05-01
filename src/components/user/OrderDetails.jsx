@@ -3,6 +3,7 @@ import Address from './Address'
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../config/axiosInstance';
 import { useUser } from '../../context/UserContext';
+import toast from 'react-hot-toast';
 
 const OrderDetails = () => {
 
@@ -61,66 +62,154 @@ const OrderDetails = () => {
 
 
 
-    const handlePayment = async () => {
+    // const handlePayment = async () => {
 
+    //     try {
+
+    //         // let user = await currentUser.firstName;
+    //         const userId = await currentUser._id
+    //         const bagId = id;
+    //         if (!selectedAddress) {
+    //             alert('Please add or select an address');
+    //             return;
+    //         }
+
+    //         const addressId = selectedAddress._id;
+
+    //         console.log(`userId: ${userId}, bagId: ${bagId}, addressId: ${addressId}`);
+
+    //         // Step 1: Create Razorpay order
+    //         const { data } = await axiosInstance.post('/payment/create-order', { id });
+
+    //         const options = {
+    //             key: import.meta.env.VITE_SOME_KEY,
+    //             amount: data.amount,
+    //             currency: 'INR',
+    //             order_id: data.razorpayOrderId,
+    //             name: 'Neko Nation',
+    //             description: 'Payment for your order',
+    //             handler: async function (response) {
+    //                 // Step 2: Send payment details to backend for verification
+    //                 const paymentResponse = await axiosInstance.post('/payment/verify', {
+    //                     razorpayPaymentId: response.razorpay_payment_id,
+    //                     razorpayOrderId: response.razorpay_order_id,
+    //                     razorpaySignature: response.razorpay_signature,
+    //                     userId,
+    //                     addressId,
+    //                     bagId,
+    //                 });
+
+    //                 console.log(paymentResponse);
+
+
+    //                 if (paymentResponse.data.message === "Payment Successfully") {
+    //                     alert('Payment successful, order created!');
+    //                     navigate('/')
+    //                 } else {
+    //                     alert('Payment verification failed!');
+    //                 }
+    //             },
+    //             prefill: {
+    //                 name: currentUser.firstName,
+    //                 email: currentUser.email,
+    //                 contact: '9999999999',
+    //             },
+    //         };
+
+    //         const razorpay = new window.Razorpay(options);
+    //         razorpay.open();
+    //     } catch (error) {
+    //         console.error('Payment error:', error);
+    //     }
+    // };
+
+
+
+    const handlePayment = async () => {
         try {
 
-            // let user = await currentUser.firstName;
-            const userId = await currentUser._id
-            const bagId = id;
-            if (!selectedAddress) {
-                alert('Please add or select an address');
+            if(!currentUser){
+                toast.error('User not found , Please login and try again');
                 return;
             }
 
+            if(!selectedAddress){
+                toast.error('Please create or select an address');
+                return;
+            }
+
+    
+            const userId = currentUser._id;
+            const bagId = id; 
+    
+            if (!bagId) {
+                toast.error('Bag Id missing try again ');
+                return;
+            }
+    
             const addressId = selectedAddress._id;
-
+    
             console.log(`userId: ${userId}, bagId: ${bagId}, addressId: ${addressId}`);
-
+    
             // Step 1: Create Razorpay order
-            const { data } = await axiosInstance.post('/payment/create-order', { id });
-
+            const { data } = await axiosInstance.post('/payment/create-order', { id: bagId });
+    
+            if (!data || !data.razorpayOrderId || !data.amount) {
+                console.error('Invalid response from /payment/create-order:', data);
+                toast.error('Failed to initiate payment. Please try again.');
+                return;
+            }
+    
             const options = {
-                key: import.meta.env.VITE_SOME_KEY,
+                key: import.meta.env.VITE_SOME_KEY, // Ensure this matches your .env variable
                 amount: data.amount,
                 currency: 'INR',
                 order_id: data.razorpayOrderId,
                 name: 'Neko Nation',
                 description: 'Payment for your order',
                 handler: async function (response) {
-                    // Step 2: Send payment details to backend for verification
-                    const paymentResponse = await axiosInstance.post('/payment/verify', {
-                        razorpayPaymentId: response.razorpay_payment_id,
-                        razorpayOrderId: response.razorpay_order_id,
-                        razorpaySignature: response.razorpay_signature,
-                        userId,
-                        addressId,
-                        bagId,
-                    });
-
-                    console.log(paymentResponse);
-
-
-                    if (paymentResponse.data.message === "Payment Successfully") {
-                        alert('Payment successful, order created!');
-                        navigate('/')
-                    } else {
-                        alert('Payment verification failed!');
+                    try {
+                        // Step 2: Send payment details to backend for verification
+                        const paymentResponse = await axiosInstance.post('/payment/verify', {
+                            razorpayPaymentId: response.razorpay_payment_id,
+                            razorpayOrderId: response.razorpay_order_id,
+                            razorpaySignature: response.razorpay_signature,
+                            userId,
+                            addressId,
+                            bagId,
+                        });
+    
+                        console.log(paymentResponse);
+    
+                        if (paymentResponse.data.message === "Payment Successfully") {
+                            toast.success('Payment successful, order created!');
+                            navigate('/');
+                        } else {
+                            toast.error('Payment verification failed!');
+                        }
+                    } catch (error) {
+                        console.error('Payment verification error:', error);
+                        toast.error('Error verifying payment. Please try again.');
                     }
                 },
                 prefill: {
-                    name: 'john',
-                    email: 'johndoe@example.com',
-                    contact: '9999999999',
+                    name: currentUser.firstName || 'User',
+                    email: currentUser.email || 'user@example.com',
+                    contact: '7510342850',
                 },
+                method: {
+                    upi: true,  // Ensure UPI payments are enabled
+                  }
             };
-
-            const razorpay = new Razorpay(options);
+    
+            const razorpay = new window.Razorpay(options);
             razorpay.open();
         } catch (error) {
             console.error('Payment error:', error);
+            toast.error('An error occurred while processing the payment.');
         }
     };
+    
 
 
 

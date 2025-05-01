@@ -39,6 +39,11 @@ import MusicProducts from './components/user/MusicProducts';
 import ProductUpdateForm from './components/manager/ProductUpdateForm';
 import AddPoster from './components/manager/AddPoster';
 import FacebookPixel from './components/FacebookPixel';
+import ProtectedRoute from './components/common/ProtectedRoute.jsx';
+import ToastProvider from './components/common/ToastProvider';
+import Orders from './components/manager/Orders.jsx';
+import ManagerOrderDetails from './components/manager/ManagerOrderDetails.jsx';
+
 
 
 
@@ -62,14 +67,7 @@ const router = createBrowserRouter([
         path: "/user/about-us",
         element: <AboutUs />
       },
-      {
-        path: "/user/bag",
-        element: <Bag />
-      },
-      {
-        path: "/order-details/:id",
-        element: <OrderDetails />
-      },
+
       {
         path: "/user/contact-us",
         element: <ContactUs />
@@ -82,41 +80,7 @@ const router = createBrowserRouter([
         path: "/user/signin",
         element: <UserSignIn />
       },
-      {
-        path: "/user/profile",
-        element: <Profile />,
-        children: [
-          {
 
-            index: true,
-            element: <UserDetail />
-          },
-          {
-            path: '/user/profile/user-details',
-            element: <UserDetail />
-          },
-          {
-            path: '/user/profile/my-orders',
-            element: <Myorder />
-          },
-          {
-            path: '/user/profile/my-wishlist',
-            element: <Mywishlist />
-          },
-          {
-            path: "/user/profile/my-address",
-            element: <MyAddress />
-          },
-          {
-            path: "/user/profile/terms-of-use",
-            element: <TermsOfUse />
-          },
-          {
-            path: "/user/profile/privacy-and-policy",
-            element: <Privacyandpolicy />
-          }
-        ]
-      },
       {
         path: '/products/male',
         element: <MaleProducts />
@@ -144,34 +108,97 @@ const router = createBrowserRouter([
       {
         path: "/product/interests/music",
         element: <MusicProducts />
+      },
+      {
+        element: <ProtectedRoute role='user' />,
+        children: [
+
+          {
+            path: "/user/bag",
+            element: <Bag />
+          },
+          {
+            path: "/order-details/:id",
+            element: <OrderDetails />
+          },
+
+          {
+            path: "/user/profile",
+            element: <Profile />,
+            children: [
+              {
+
+                index: true,
+                element: <UserDetail />
+              },
+              {
+                path: '/user/profile/user-details',
+                element: <UserDetail />
+              },
+              {
+                path: '/user/profile/my-orders',
+                element: <Myorder />
+              },
+              {
+                path: '/user/profile/my-wishlist',
+                element: <Mywishlist />
+              },
+              {
+                path: "/user/profile/my-address",
+                element: <MyAddress />
+              },
+              {
+                path: "/user/profile/terms-of-use",
+                element: <TermsOfUse />
+              },
+              {
+                path: "/user/profile/privacy-and-policy",
+                element: <Privacyandpolicy />
+              }
+            ]
+          },
+        ]
       }
     ]
   },
   {
     element: <ManagerLayout />,
     children: [
-      {
-        path: "/manager/products",
-        element: <ManagerProducts />
-      },
-      {
-        path: "/manager/create-products",
-        element: <CreateProducts />
-      },
-      {
-        path: "/manager/products/update-product/:id",
-        element: <ProductUpdateForm />
-      },
-      {
-        path: "/manager/poster/add-poster",
-        element: <AddPoster />
-      },
-      {
-        path: "/Manager/profile",
-        element: <ManagerProfile />,
 
-      },
+      {
+        element: <ProtectedRoute role='manager' />,
+        children: [
+          {
+            path: "/manager/products",
+            element: <ManagerProducts />
+          },
+          {
+            path: "/manager/orders",
+            element: <Orders />
+          },
+          {
+            path: "/manager/order/details/:id",
+            element: <ManagerOrderDetails />
+          },
+          {
+            path: "/manager/create-products",
+            element: <CreateProducts />
+          },
+          {
+            path: "/manager/products/update-product/:id",
+            element: <ProductUpdateForm />
+          },
+          {
+            path: "/manager/poster/add-poster",
+            element: <AddPoster />
+          },
+          {
+            path: "/Manager/profile",
+            element: <ManagerProfile />,
 
+          },
+        ]
+      }
     ]
   }
 ]);
@@ -182,6 +209,7 @@ createRoot(document.getElementById('root')).render(
       <FacebookPixel />
       <UserProvider >
         <RouterProvider router={router} />
+        <ToastProvider />
       </UserProvider>
     </HelmetProvider>
   </StrictMode>,

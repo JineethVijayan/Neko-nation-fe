@@ -4,6 +4,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axiosInstance from "../../config/axiosInstance";
 import { useUser } from "../../context/UserContext";
+import toast from "react-hot-toast";
+import CustomToast from "../common/CustomToast";
 
 // Define the schema using Yup
 const addressSchema = yup.object().shape({
@@ -78,14 +80,14 @@ const Address = ({ handleRadioChange, selectedAddress }) => {
                 setAddresses((prev) =>
                     prev.map((addr) => (addr._id === res.data._id ? res.data : addr))
                 );
-                alert("Address updated successfully!");
+                toast.success("Address updated successfully!");
             } else {
                 const res = await axiosInstance.post("/address/add-address", {
                     ...data,
                     userId: currentUser._id,
                 });
                 setAddresses([...addresses, res.data.address]);
-                alert("Address added successfully!");
+                toast.success("Address added successfully!");
             }
 
             fetchAddresses();
@@ -96,7 +98,7 @@ const Address = ({ handleRadioChange, selectedAddress }) => {
             setIsAddressFormOpen(false);
         } catch (error) {
             console.error("Error saving address:", error);
-            alert("Failed to save address.");
+            toast.error("Failed to save address.");
         }
     };
 
@@ -121,15 +123,32 @@ const Address = ({ handleRadioChange, selectedAddress }) => {
 
 
     const handleDelete = async (id) => {
-        try {
-            await axiosInstance.delete(`/address/delete-address/${id}`);
-            setAddresses((prev) => prev.filter((addr) => addr._id !== id));
-            alert("Address deleted successfully!");
-        } catch (error) {
-            console.error("Error deleting address:", error);
-            alert("Failed to delete address.");
-        }
+        toast.custom((t) => (
+            <CustomToast
+                message="Are you sure you want to delete this address?"
+                onDone={async () => {
+                    toast.dismiss(t.id);
+                    try {
+                        await axiosInstance.delete(`/address/delete-address/${id}`);
+                        setAddresses((prev) => prev.filter((addr) => addr._id !== id));
+                        toast.success("Address deleted successfully!");
+                    } catch (error) {
+                        console.error("Error deleting address:", error);
+                    if (error.response && error.response.status === 400) {
+                        toast.error(error.response.data.message || "This address is linked to an order and cannot be deleted.");
+                    } else {
+                        toast.error("Failed to delete address.");
+                    }
+                    }
+                }}
+                onCancel={() => {
+                    toast.dismiss(t.id);
+                    toast.error("Delete action cancelled!");
+                }}
+            />
+        ), { duration: Infinity }); // Toast remains until action is taken
     };
+    
 
     const handleAddressSelection = (address) => {
         handleRadioChange(address);

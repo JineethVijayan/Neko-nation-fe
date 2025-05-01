@@ -3,6 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axiosInstance from '../../config/axiosInstance';
 import { useUser } from '../../context/UserContext';
 import ImageGallery from './ImageGallery';
+import toast from 'react-hot-toast';
+import CustomToast from '../common/CustomToast';
 
 
 const ProductDetail = () => {
@@ -55,12 +57,30 @@ const ProductDetail = () => {
 
     const submitData = async () => {
         if (!currentUser) {
-            alert('please login first');
-            navigate('/user/signin');
+            toast.custom((t) => (
+                <CustomToast
+                    message="Please login or create an account"
+                    onDone={() => {
+                        toast.dismiss(t.id); 
+                        navigate("/user/signin");
+                       
+                    }}
+                    onCancel={() => {
+                        toast.dismiss(t.id); 
+                        toast.error('Cancelled!');
+                     
+                    }}
+                />
+            ), { duration: Infinity }); 
             return;
         };
         if (!selectedSize) {
-            alert('please select size first');
+            toast.error('please select size first')
+            return;
+        }
+
+        if(!selectedColor){
+            toast.error('please select color');
             return;
         }
 
@@ -75,8 +95,7 @@ const ProductDetail = () => {
             const res = await axiosInstance.post('/bag/add-bag', { userId, productId, size, color });
             const resData = res.data;
             setItemCount(resData.bag.totalItems)
-            console.log(resData);
-            // navigate('/user/bag')
+           toast.success('Item successfully added')
 
         } catch (error) {
             console.log('error', error);

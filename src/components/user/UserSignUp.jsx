@@ -1,9 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom'
 import * as yup from "yup";
 import axiosInstance from '../../config/axiosInstance';
+import toast from 'react-hot-toast';
 
 
 const schema = yup.object({
@@ -28,6 +29,14 @@ const UserSignUp = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) });
 
+     const [showPassword, setShowPassword] = useState(false);
+    
+    
+        const togglePasswordVisibility = () => {
+            setShowPassword((prev) => !prev);
+        };
+    
+
     const onSubmit = async (data) => {
         try {
 
@@ -38,12 +47,26 @@ const UserSignUp = () => {
             console.log(resData);
 
             if (resData === 'signed up successfully') {
-                alert('Signed up successfully! Please log in.');
+                toast.success('Signed up successfully! Please log in.')
+
                 navigate('/user/signin');
             }
 
         } catch (error) {
-            console.log('error :', error);
+            if (error.response) {
+                const { status, data } = error.response;
+
+                // Handle different status codes
+                if (status === 401) {
+                    toast.error('User already exists');
+                } else if (status === 500) {
+                    toast.error('Server error! Please try again later.');
+                } else {
+                    toast.error(data || 'Something went wrong!');
+                }
+            } else {
+                toast.error('Network error! Please check your internet.');
+            }
 
         }
 
@@ -59,7 +82,18 @@ const UserSignUp = () => {
                     {errors.lastName?.message}
                     <input type="email" {...register('email')} placeholder='Email' className='mt-6  border border-[#ff7b00] focus:border-[#ffea00] focus:outline-none focus:ring-1 focus:ring-[#ffc300] rounded p-2' />
                     {errors.email?.message}
-                    <input type="password" {...register('password')} placeholder='Password' className='mt-6  border border-[#ff7b00] focus:border-[#ffea00] focus:outline-none focus:ring-1 focus:ring-[#ffc300] rounded p-2' />
+                   
+                   
+                    <div className='relative'>
+                        <input type={showPassword ? "text":"password"} placeholder='Password' {...register('password')} className=' w-full mt-6  border border-[#ff7b00] focus:border-[#ffea00] focus:outline-none focus:ring-1 focus:ring-[#ffc300] rounded p-2 pr-10' />
+
+                        <button type="button" onClick={togglePasswordVisibility}
+                            className="absolute inset-y-0 right-3 top-5 flex items-center text-gray-600 ">
+                            {showPassword ? <img src="../images/hide.png" className='w-4 h-4' alt="hide" /> : <img src="../images/view.png" className='w-4 h-4' alt="view" />}
+                        </button>
+
+                    </div>
+                   
                     {errors.password?.message}
                     <input type="password" {...register('confirmPassword')} placeholder='Confirm Password' className='mt-6  border border-[#ff7b00] focus:border-[#ffea00] focus:outline-none focus:ring-1 focus:ring-[#ffc300] rounded p-2' />
                     {errors.confirmPassword?.message}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../config/axiosInstance";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Bag = () => {
     const { currentUser, loading: userLoading, itemCount, setItemCount } = useUser();
@@ -34,12 +35,26 @@ const Bag = () => {
             }
         };
 
+        // **Wait until user loading is complete before fetching the bag**
         if (!userLoading) {
-            getBag();
+            if (currentUser) {
+                getBag();
+            } else {
+                setLoading(false); // Stop loading if no user
+            }
         }
     }, [currentUser, userLoading]);
 
-    if (loading) return <div>Loading your bag...</div>;
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-40">
+                <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500"></div>
+            </div>
+        )
+    }
+
+
     if (!bag?.items?.length) return <div>Your bag is empty.</div>;
 
     const handleUpdateBagItem = async (itemId, newSize, newColor, newQuantity) => {
@@ -58,7 +73,7 @@ const Bag = () => {
             }
         } catch (error) {
             console.error("Error updating bag item:", error);
-            alert("Failed to update bag item");
+            toast.error("Failed to update bag item");
         }
     };
 
@@ -72,6 +87,7 @@ const Bag = () => {
             setItemCount(res.data.bag.totalItems);
         } catch (error) {
             console.error("Error deleting bag item:", error);
+            toast.error('Error deleting bag item')
             throw error;
         }
     };
@@ -140,7 +156,7 @@ const Bag = () => {
                                     </label>
                                 </div>
 
-                              
+
 
                                 {/* Quantity Controls */}
                                 <div className=" w-40">
@@ -167,8 +183,8 @@ const Bag = () => {
                                 </div>
 
 
-                                  {/* Price */}
-                                  <div className="w-24">
+                                {/* Price */}
+                                <div className="w-24">
                                     <p>Price: ₹{item.product.price}</p>
                                 </div>
 

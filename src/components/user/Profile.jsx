@@ -25,13 +25,11 @@ const Profile = () => {
 
             {currentUser &&
                 <div>
-                {/* <h1>{currentUser.firstName} {currentUser.lastName}</h1>
-            <h1>{currentUser.email}</h1>
-            <button onClick={handleLogout}>logout</button> */}
+               
 
                     <div className='flex flex-row p-10 item-center'>
                         <div className='w-24 h-24  '>
-                            <img src='../public/images/account.png' alt="" />
+                            <img src='../images/account.png' alt="" />
                         </div>
                         <div className=' p-4'>
                             <h1 className='text-3xl'>Hello <span className='font-bold'>{currentUser.firstName} </span></h1>
