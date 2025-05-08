@@ -48,7 +48,7 @@ const Carousel = () => {
 
     ) : (
 
-      <div className="relative w-full h-[150px] sm:h-[400px] xs:h-[200px] overflow-hidden mt-0">
+      <div className="relative w-full h-[150px] sm:h-[75%] xs:h-[200px] overflow-hidden mt-0">
         {/* Slides */}
         <div
           className="flex transition-transform duration-500 ease-in-out w-full"
