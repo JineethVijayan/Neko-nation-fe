@@ -48,7 +48,7 @@ const Carousel = () => {
 
     ) : (
 
-      <div className="relative w-full h-[150px] sm:h-[320px] xs:h-[200px] overflow-hidden pt-">
+      <div className="relative w-full h-[150px] sm:h-[400px] xs:h-[200px] overflow-hidden mt-0">
         {/* Slides */}
         <div
           className="flex transition-transform duration-500 ease-in-out w-full"
@@ -59,7 +59,7 @@ const Carousel = () => {
           {posters.map((poster, index) => (
             <div
               key={index}
-              className="h-[150px] sm:h-[320px] xs:h-[200px] min-w-full flex-shrink-0 bg-cover bg-center"
+              className="h-[150px] sm:h-[400px] xs:h-[200px] min-w-full flex-shrink-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${poster})` }}
             ></div>
           ))}

@@ -6,7 +6,7 @@ import Interests from './Interests'
 
 const Home = () => {
   return (
-    <div className='pt-16  '>
+    <div className='pt-[59px] '>
       <Carousel />
       <GenderSection />
       <LatestProduct />

@@ -16,7 +16,7 @@ const UserProductCard = (props) => {
     return (
         <div className='w-72  justify-self-center'>
 
-            <div onClick={navigateTo} className="h-72 w-72 bg-no-repeat bg-cover object-cover bg-center text-center" style={{ backgroundImage: `url(${props.image})` }}>
+            <div onClick={navigateTo} className="h-[388px] w-72 bg-no-repeat bg-cover object-cover bg-center text-center" style={{ backgroundImage: `url(${props.image})` }}>
 
             </div>
 

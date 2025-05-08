@@ -37,7 +37,7 @@ const ManagerNavbar = () => {
 
 
     return (
-        <nav className=" bg-[#f1faee] fixed w-full px-4 z-20">
+        <nav className=" bg-[#e09b2d]  fixed w-full px-4 z-20">
             <div className="container mx-auto flex justify-between items-center">
 
 
@@ -50,7 +50,7 @@ const ManagerNavbar = () => {
                     {navLinks.map((link, index) =>
 
                         <Link key={index} to={link.path} >
-                            <li className='text-green-800 px-5 '>{link.value}</li>
+                            <li className='text-black px-5 '>{link.value}</li>
                         </Link>
 
                     )}
@@ -70,7 +70,7 @@ const ManagerNavbar = () => {
                     {navLinks.map((link, index) =>
 
                         <Link key={index} to={link.path} >
-                            <li className='text-green-800 px-5 '>{link.value}</li>
+                            <li className='text-black px-5 '>{link.value}</li>
                         </Link>
 
                     )}

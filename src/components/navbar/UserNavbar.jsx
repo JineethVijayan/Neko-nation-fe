@@ -334,7 +334,7 @@ const UserNavbar = () => {
     ];
 
     return (
-        <nav className="bg-[#edf6f9] fixed w-full px-4 z-20 shadow-md">
+        <nav className="bg-[#e09b2d] fixed w-full px-4 z-20 shadow-md mb-0">
             <div className="container mx-auto flex justify-between items-center py-3">
                 {/* Logo */}
                 <Link to="/">
@@ -362,7 +362,7 @@ const UserNavbar = () => {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="p-1 border-b-[1px] border-black text-sm bg-[#edf6f9] focus:outline-none"
+                                className="p-1 border-b-[1px] border-black text-sm bg-[#e09b2d] focus:outline-none placeholder-black"
                             />
                             <button
                                 type="submit"

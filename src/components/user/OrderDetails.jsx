@@ -195,7 +195,7 @@ const OrderDetails = () => {
                 prefill: {
                     name: currentUser.firstName || 'User',
                     email: currentUser.email || 'user@example.com',
-                    contact: '7510342850',
+                     contact:selectedAddress.phoneNumber,
                 },
                 method: {
                     upi: true,  // Ensure UPI payments are enabled

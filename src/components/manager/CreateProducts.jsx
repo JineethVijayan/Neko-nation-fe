@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import MultiSelect from "./MultiSelect";
 import axiosInstance from "../../config/axiosInstance";
+import CreatableMultiselect from "./CreatableMultiselect";
+import toast from "react-hot-toast";
 
 const categories = [
     { value: "T-Shirt", label: "T-Shirt" },
@@ -56,8 +58,9 @@ const colors = [
 
 const tags = [
     { value: "anime", label: "Anime" },
-    { value: "streetwear", label: "Streetwear" },
-    { value: "casual", label: "Casual" },
+    { value: "streetwears", label: "Streetwears" },
+    { value: "casuals", label: "Casuals" },
+    { value: "solids", label: "Solids" },
 ]
 
 
@@ -69,8 +72,8 @@ const validationSchema = Yup.object({
         .required("Price is required"),
     description: Yup.string().required("Description is required"),
     category: Yup.string().required("Category is required"),
-    subcategory:Yup.string().optional(),
-    interests:Yup.string().optional(),
+    subcategory:Yup.string().nullable().optional(),
+    interests:Yup.string().nullable().optional(),
     gender: Yup.string().required("gender is required"),
     sizes: Yup.array()
         .min(1, "Select at least one size")
@@ -114,15 +117,21 @@ const CreateProducts = () => {
         formData.append('description', data.description);
         formData.append('category', data.category);
         formData.append('gender', data.gender);
-        formData.append('subcategory',data.subcategory);
-        formData.append('interests',data.interests);
+       
+        if (data.subcategory) {
+            formData.append('subcategory', data.subcategory);
+        }
+        if (data.interests) {
+            formData.append('interests', data.interests);
+        }
+        
 
         data.sizes.forEach((size,index)=>{
             formData.append('sizes',size)
         });
 
         data.colors.forEach((color,index)=>{
-            formData.append('colors',color)
+            formData.append('colors',color.value)
         });
        
         
@@ -134,7 +143,7 @@ const CreateProducts = () => {
         });
 
         data.tags.forEach((tag,index)=>{
-            formData.append('tags',tag)
+            formData.append('tags',tag.value)
         })
 
 
@@ -150,10 +159,18 @@ const CreateProducts = () => {
 
             const resData = await res.data;
 
+           
+            toast.success("Product created successfully!");
+
             console.log(resData);
             
 
         } catch (error) {
+            
+            toast.error(
+                error?.response?.data?.message || "Failed to create product. Try again."
+            );
+
             
         }
 
@@ -248,10 +265,11 @@ const CreateProducts = () => {
                         <Controller
                             name='subcategory'
                             control={control}
-                            defaultValue=''
+                            defaultValue={null}
                             render={({ field }) => (
                                 <Select
                                     className="mt-6"
+                                    isClearable
                                     {...field}
                                     styles={{
                                         control: (baseStyles, state) => ({
@@ -296,10 +314,11 @@ const CreateProducts = () => {
 <Controller
     name='interests'
     control={control}
-    defaultValue=''
+    defaultValue={null}
     render={({ field }) => (
         <Select
             className="mt-6"
+            isClearable
             {...field}
             styles={{
                 control: (baseStyles, state) => ({
@@ -400,7 +419,8 @@ const CreateProducts = () => {
                     <div>
 
 
-                        <MultiSelect items={colors} name='colors' control={control} />
+                        {/* <MultiSelect items={colors} name='colors' control={control} /> */}
+                        <CreatableMultiselect items={colors} name='colors' control={control} />
                         {errors.colors && (
                             <p style={{ color: "red" }}>{errors.colors.message}</p>
                         )}

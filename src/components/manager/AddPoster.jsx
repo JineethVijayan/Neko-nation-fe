@@ -10,8 +10,8 @@ const AddPoster = () => {
     const [imageSrc, setImageSrc] = useState(null);
     const [croppedImages, setCroppedImages] = useState([]); // Stores multiple cropped images
 
-    const CROP_WIDTH = 800;
-    const CROP_HEIGHT = 300;
+    const CROP_WIDTH = 1300;
+    const CROP_HEIGHT = 400;
 
     // Handle file selection
     const onFileChange = (e) => {
@@ -93,8 +93,8 @@ const AddPoster = () => {
                         <Cropper
                             src={imageSrc}
                             style={{ height: 300, width: "100%" }}
-                            initialAspectRatio={1}
-                            aspectRatio={4}
+                            initialAspectRatio={CROP_WIDTH / CROP_HEIGHT}
+                            aspectRatio={CROP_WIDTH / CROP_HEIGHT}
                             guides={false}
                             ref={cropperRef}
                             viewMode={1}
