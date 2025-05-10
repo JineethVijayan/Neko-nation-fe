@@ -61,17 +61,17 @@ const ProductDetail = () => {
                 <CustomToast
                     message="Please login or create an account"
                     onDone={() => {
-                        toast.dismiss(t.id); 
+                        toast.dismiss(t.id);
                         navigate("/user/signin");
-                       
+
                     }}
                     onCancel={() => {
-                        toast.dismiss(t.id); 
+                        toast.dismiss(t.id);
                         toast.error('Cancelled!');
-                     
+
                     }}
                 />
-            ), { duration: Infinity }); 
+            ), { duration: Infinity });
             return;
         };
         if (!selectedSize) {
@@ -79,7 +79,7 @@ const ProductDetail = () => {
             return;
         }
 
-        if(!selectedColor){
+        if (!selectedColor) {
             toast.error('please select color');
             return;
         }
@@ -95,7 +95,7 @@ const ProductDetail = () => {
             const res = await axiosInstance.post('/bag/add-bag', { userId, productId, size, color });
             const resData = res.data;
             setItemCount(resData.bag.totalItems)
-           toast.success('Item successfully added')
+            toast.success('Item successfully added')
 
         } catch (error) {
             console.log('error', error);
@@ -110,7 +110,7 @@ const ProductDetail = () => {
 
                 <div className='grid  grid-cols-4'>
 
-                    <div className=' col-span-2 '>
+                    <div className='col-span-2 '>
                         {
                             product.images && <ImageGallery images={product.images} />
                         }

@@ -302,6 +302,7 @@ const UserNavbar = () => {
         toast.custom((t) => (
             <CustomToast
                 message="Are you sure? You want to log out"
+                action='Logout'
                 onDone={async () => {
                     toast.dismiss(t.id);
                     

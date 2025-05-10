@@ -4,6 +4,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
+
 const ManagerProductCard = (props) => {
 
     const navigate = useNavigate();
@@ -12,6 +13,13 @@ const ManagerProductCard = (props) => {
         navigate(``)
     }
 
+    const handleDelete =(event)=>{
+
+        event.preventDefault();
+
+     props.onDeleteProduct(props.productId)
+        
+    }
 
     return (
         <div className='w-72  justify-self-center'>
@@ -32,7 +40,7 @@ const ManagerProductCard = (props) => {
 
             <div className='flex justify-between mt-2'>
             <Link to={`/manager/products/update-product/${props.productId}`} className='inline-flex items-center  px-3 py-2 text-sm font-medium text-center text-white bg-yellow-700 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800'>Edit</Link>
-            <button className='inline-flex items-center  px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800'>Delete</button>
+            <button className='inline-flex items-center  px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800' onClick={handleDelete} >Delete</button>
             </div>
 
         </div>

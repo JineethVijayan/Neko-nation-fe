@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axiosInstance from '../../config/axiosInstance';
 import ManagerProductCard from './ManagerProductCard';
+import toast from 'react-hot-toast';
+import CustomToast from '../common/CustomToast';
 
 const ManagerProducts = () => {
 
@@ -27,6 +29,46 @@ const ManagerProducts = () => {
 
 
 
+  const deleteProduct = async (id) => {
+
+    toast.custom((t) => (
+      <CustomToast
+
+        message="Are you sure? You want to delete"
+        action='Delete'
+
+        onDone={
+          async () => {
+            toast.dismiss(t.id);
+            try {
+
+              if (id) {
+                const res = await axiosInstance.delete(`/product//delete-product/${id}`);
+                const resData = res.data;
+                console.log(resData);
+
+                setProducts((preProducts) => preProducts.filter((product) => product._id !== id));
+
+                toast.success('Deleted successfully');
+              }
+
+            } catch (error) {
+              console.log(error);
+              toast.error('Delete Failed')
+            }
+          }
+        }
+
+        onCancel={() => {
+          toast.dismiss(t.id);
+          toast.error('Canceled!')
+        }}
+
+      />
+    ), { duration: Infinity });
+  }
+
+
 
   return (
     <div className='pt-24 px-10'>
@@ -35,7 +77,7 @@ const ManagerProducts = () => {
 
         {
           products && products.map((product) =>
-            <ManagerProductCard key={product._id} productId={product._id} name={product.name}  price= {product.price} image= {product.images[0]} colors={product.colors} />
+            <ManagerProductCard key={product._id} productId={product._id} name={product.name} price={product.price} image={product.images[0]} colors={product.colors} onDeleteProduct={deleteProduct} />
           )
         }
 

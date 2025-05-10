@@ -13,7 +13,7 @@ const Footer = () => {
     };
 
     return (
-        <div className="bg-stone-200  sm:text-center sm:grid sm:grid-cols-4 sm:gap-10 p-8">
+        <div className="bg-stone-200  sm:text-center sm:grid sm:grid-cols-4 sm:gap-10 p-8 mt-8">
             {/* Logo & Copyright */}
             <div className="mb-10 sm:mb-0">
                 <img
@@ -54,7 +54,7 @@ const Footer = () => {
                 </button>
                 <div className={`overflow-hidden transition-all duration-300 ${openDropdown === "social" ? "max-h-40" : "max-h-0"} sm:max-h-none`}>
                     <div className="flex flex-col space-y-2 mt-2">
-                        <Link to="/instagram">Instagram</Link>
+                        <Link to="https://www.instagram.com/nekonation__/">Instagram</Link>
                         <Link to="/facebook">Facebook</Link>
                         <Link to="/linkedin">LinkedIn</Link>
                         <Link to="/twitter">Twitter</Link>

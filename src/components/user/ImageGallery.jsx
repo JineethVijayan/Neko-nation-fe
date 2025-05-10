@@ -31,7 +31,7 @@ const ImageGallery = ({ images }) => {
                 <img
                     src={selectedImage}
                     alt="Selected"
-                    className="w-full h-auto max-h-[480px] object-contain border border-gray-300 rounded-md"
+                    className="w-full h-auto max-h-[680px] object-contain border border-gray-300 rounded-md"
                 />
             </div>
         </div>
