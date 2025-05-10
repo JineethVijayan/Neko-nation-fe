@@ -105,64 +105,75 @@ const ProductDetail = () => {
 
     return (
         <div className='pt-24'>
-            <div>
-
-
-                <div className='grid  grid-cols-4'>
-
-                    <div className='col-span-2 '>
-                        {
-                            product.images && <ImageGallery images={product.images} />
-                        }
-                    </div>
-
-                    <div className='col-span-2 p-10  '>
-                        <h1 className='text-4xl'>{product.name}</h1>
-
-                        <h1 className='text-3xl mt-10'>₹ {product.price}</h1>
-
-                        <div className='grid grid-flow-col w-56  mt-10'>
-
-                            {
-                                product.sizes?.map((size, index) => (
-                                    <p onClick={() => handleSize(size)} className={`cursor-pointer px-4 py-2 me-2  ${selectedSize === size
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-200 hover:bg-gray-300'
-                                        }`} key={index}>{size}</p>
-                                ))
-                            }
-
-
-                        </div>
-
-
-                        <div className='grid grid-flow-col w-56  mt-10'>
-
-                            {
-                                product.colors?.map((color, index) => (
-                                    <p onClick={() => handleColor(color)} className={`cursor-pointer px-4 py-2 me-2  ${selectedColor === color
-                                        ? 'bg-blue-500 text-white'
-                                        : 'bg-gray-200 hover:bg-gray-300'
-                                        }`} key={index}>{color}</p>
-                                ))
-                            }
-
-
-
-                        </div>
-
-
-                        <button onClick={() => submitData()} className=' mt-10 bg-black text-white p-4 rounded w-3/4 '>Add To Bag</button>
-
-                        <div className='cursor-pointer  mt-16 flex flex-row justify-between ' onClick={() => onSelect()}>  <div className='text-xl'>Description</div> <div>⌄</div></div>
-                        {
-                            description === true && <div className='pt-8'>{product.description}</div>
-                        }
-                        <hr className='text-2xl  mt-3' />
-                    </div>
-                </div>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6 px-4'>
+      
+          {/* Left Side: Image Gallery */}
+          <div>
+            {product.images && <ImageGallery images={product.images} />}
+          </div>
+      
+          {/* Right Side: Product Info */}
+          <div className='p-4'>
+            <h1 className='text-2xl md:text-4xl'>{product.name}</h1>
+      
+            <h1 className='text-xl md:text-3xl mt-6'>₹ {product.price}</h1>
+      
+            {/* Size Selector */}
+            <div className='grid grid-flow-col auto-cols-max gap-2 mt-6'>
+              {product.sizes?.map((size, index) => (
+                <p
+                  key={index}
+                  onClick={() => handleSize(size)}
+                  className={`cursor-pointer px-4 py-2 rounded text-center text-sm ${
+                    selectedSize === size
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-200 hover:bg-gray-300'
+                  }`}
+                >
+                  {size}
+                </p>
+              ))}
             </div>
+      
+            {/* Color Selector */}
+            <div className='grid grid-flow-col auto-cols-max gap-2 mt-6'>
+              {product.colors?.map((color, index) => (
+                <p
+                  key={index}
+                  onClick={() => handleColor(color)}
+                  className={`cursor-pointer px-4 py-2 rounded text-center text-sm ${
+                    selectedColor === color
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-200 hover:bg-gray-300'
+                  }`}
+                >
+                  {color}
+                </p>
+              ))}
+            </div>
+      
+            <button
+              onClick={submitData}
+              className='mt-8 bg-black text-white p-4 rounded w-full'
+            >
+              Add To Bag
+            </button>
+      
+            {/* Description Toggle */}
+            <div
+              className='cursor-pointer mt-10 flex items-center justify-between'
+              onClick={onSelect}
+            >
+              <div className='text-lg font-semibold'>Description</div>
+              <div className='text-xl'>⌄</div>
+            </div>
+            {description && <div className='pt-4 text-sm'>{product.description}</div>}
+      
+            <hr className='mt-6' />
+          </div>
         </div>
+      </div>
+      
     )
 }
 
