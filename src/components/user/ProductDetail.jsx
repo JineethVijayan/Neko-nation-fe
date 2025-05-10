@@ -39,7 +39,7 @@ const ProductDetail = () => {
 
 
 
-    const [description, setDescription] = useState(false);
+    const [description, setDescription] = useState(true);
 
     const onSelect = () => setDescription((preValue) => !preValue);
 
@@ -60,6 +60,7 @@ const ProductDetail = () => {
             toast.custom((t) => (
                 <CustomToast
                     message="Please login or create an account"
+                    action='Login'
                     onDone={() => {
                         toast.dismiss(t.id);
                         navigate("/user/signin");
@@ -165,7 +166,7 @@ const ProductDetail = () => {
               onClick={onSelect}
             >
               <div className='text-lg font-semibold'>Description</div>
-              <div className='text-xl'>⌄</div>
+              <div className='text-xl'>{description ? "^" : "⌄"}</div>
             </div>
             {description && <div className='pt-4 text-sm'>{product.description}</div>}
       

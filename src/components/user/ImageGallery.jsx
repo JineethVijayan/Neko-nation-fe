@@ -11,8 +11,8 @@ const ImageGallery = ({ images }) => {
     return (
         <div className="flex flex-wrap md:flex-nowrap gap-8">
             {/* Left Section - Thumbnails */}
-            <div className="flex flex-row md:flex-col space-x-4 md:space-x-0 md:space-y-4 px-4 
-                            overflow-x-auto md:overflow-y-auto max-h-[480px] justify-between no-scrollbar">
+            <div className="flex flex-row md:flex-col space-x-4 md:space-x-0 md:space-y-4 
+                            overflow-x-auto md:overflow-y-auto max-h-[480px] 2xl:max-h-[880px] justify-between no-scrollbar">
                 {images.map((image, index) => (
                     <img
                         key={index}
@@ -31,7 +31,7 @@ const ImageGallery = ({ images }) => {
                 <img
                     src={selectedImage}
                     alt="Selected"
-                    className="w-full h-auto max-h-[680px] object-contain border border-gray-300 rounded-md"
+                    className="w-full py-0 max-h-[880px] md object-contain border border-gray-300 rounded-md"
                 />
             </div>
         </div>

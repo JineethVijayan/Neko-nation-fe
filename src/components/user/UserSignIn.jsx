@@ -9,8 +9,8 @@ import toast from 'react-hot-toast';
 
 
 const schema = yup.object({
-    email: yup.string().email('must be a valid email').required('please enter your email'),
-    password: yup.string().required('please enter your password')
+    email: yup.string().email('Must be a valid email').required('Please enter your email'),
+    password: yup.string().required('Please enter your password')
 }).required();
 
 
@@ -53,10 +53,10 @@ const UserSignIn = () => {
             console.log(role);
 
             if (role === 'user') {
-                toast.success("successfully loged in");
+                toast.success("Successfully loged in");
                 navigate('/');
             } else if (role === 'manager') {
-                toast.success("successfully loged in");
+                toast.success("Successfully loged in");
                 navigate('/manager/products');
             }
 
